@@ -1,41 +1,80 @@
-var express = require('express'),
-    request = require('request'),
-    bodyParser = require('body-parser'),
-    app = express();
+const { readFileSync } = require('fs');
+const botConfig = require('./botconfig.json');
+var privateKey  = readFileSync(botConfig.oauth.privateKey, 'utf8');
+var certificate = readFileSync(botConfig.oauth.publicKey, 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+const port = botConfig.oauth.port;/** If you want to use the local development environment with the dev backend,
+ * this will create a proxy so you won't run into CORS issues.
+ * It accepts the following command line parameters:
+ * - port the port where the proxy will listen
+ * - target the DEV backend target to contact.
+ * Example: If you set the port to 3000 and target to https://dev.nibo.ai then
+ * your actual "resourceBaseUrl" in NiboSettings should be http://localhost:3000/api/v1
+ */
+ // Define the command line options
+const optionDefinitions = [
+	{ name: "port", alias: "p", type: Number, defaultValue: 3000 },
+	{ name: "target", alias: "t", type: String, defaultValue: "https://backend.com" }
+];
+commandLineArgs = require("command-line-args");
+// parse command line options
+const options = commandLineArgs(optionDefinitions);
 
-var myLimit = typeof(process.argv[2]) != 'undefined' ? process.argv[2] : '100kb';
-console.log('Using limit: ', myLimit);
+// Start the proxy
+console.log("Start proxy on port", options.port, "for", options.target);
+var https = require("https"), httpProxy = require("http-proxy");
 
-app.use(bodyParser.json({limit: myLimit}));
+// Create a proxy server with custom application logic
+var proxy = httpProxy.createProxyServer({});
+var sendError = function(res, err) {
+	return res.status(500).send({
+		 error: err,
+		 message: "An error occured in the proxy"
+	});
+};
 
-app.all('*', function (req, res, next) {
-
-    // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
-    res.header("Access-Control-Allow-Headers", req.header('access-control-request-headers'));
-
-    if (req.method === 'OPTIONS') {
-        // CORS Preflight
-        res.send();
-    } else {
-        var targetURL = req.header('Target-URL');
-        if (!targetURL) {
-            res.send(500, { error: 'There is no Target-Endpoint header in the request' });
-            return;
-        }
-        request({ url: targetURL + req.url, method: req.method, json: req.body, headers: {'Authorization': req.header('Authorization')} },
-            function (error, response, body) {
-                if (error) {
-                    console.error('error: ' + response.statusCode)
-                }
-//                console.log(body);
-            }).pipe(res);
-    }
+// error handling
+proxy.on("error", function (err, req, res) {
+	sendError(res, err);
 });
 
-app.set('port', process.env.PORT || 3005);
+var enableCors = function(req, res) {
+	if (req.headers['access-control-request-method']) {
+		res.setHeader('access-control-allow-methods', req.headers['access-control-request-method']);
+	}
 
-app.listen(app.get('port'), function () {
-    console.log('Proxy server listening on port ' + app.get('port'));
+	if (req.headers['access-control-request-headers']) {
+		res.setHeader('access-control-allow-headers', req.headers['access-control-request-headers']);
+	}
+
+	if (req.headers.origin) {
+		res.setHeader('access-control-allow-origin', req.headers.origin);
+		res.setHeader('access-control-allow-credentials', 'true');
+	}
+};
+
+// set header for CORS
+proxy.on("proxyRes", function(proxyRes, req, res) {
+	enableCors(req, res);
 });
+
+var server = https.createServer(credentials, function(req, res) {
+	// You can define here your custom logic to handle the request
+	// and then proxy the request.
+	if (req.method === 'OPTIONS') {
+		enableCors(req, res);
+		res.writeHead(200);
+		res.end();
+		return;
+	}
+
+	proxy.web(req, res, {
+		target: target,
+		secure: true,
+		changeOrigin: true
+	}, function(err) {
+		sendError(res, err);
+	});
+});
+
+server.listen(port);
