@@ -13,7 +13,7 @@ const app = express()
 app.use(cors())
 app.use(createProxyMiddleware({
   router: (req) => new URL(req.url.substring(1)),
-  pathRewrite: (path, req) => (new URL(req.url.substring(1)).pathname + new URL(req.url.substring(1)).search),
+  pathRewrite: (path, req) => (new URL(req.url.substring(1))).pathname + new URL(req.url.substring(1)).search,
   changeOrigin: true,
   logger: console
 }))
