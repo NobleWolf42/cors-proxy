@@ -12,10 +12,10 @@ var credentials = {key: privateKey, cert: certificate};
 const app = express()
 app.use(cors())
 app.use(createProxyMiddleware({
-  router: (req) => console.log (req.url.substring(1))/*new URL(req.path.substring(1)),
+  router: (req) => new URL(req.url.substring(1)),
   pathRewrite: (path, req) => (new URL(req.path.substring(1))).pathname,
   changeOrigin: true,
-  logger: console*/
+  logger: console
 }))
 
 https.createServer(credentials, app).listen(port);
