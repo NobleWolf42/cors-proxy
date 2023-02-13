@@ -17,6 +17,6 @@ app.use(createProxyMiddleware({
   changeOrigin: true,
   logger: console
 }))
-app.console.log (req);
+app.use(console.log (req));
 
 https.createServer(credentials, app).listen(port);
