@@ -12,8 +12,8 @@ var credentials = {key: privateKey, cert: certificate};
 const app = express()
 app.use(cors())
 app.use(createProxyMiddleware({
-  router: (req) => new URL(req.url.substring(1)),
-  pathRewrite: (path, req) => console.log ((new URL(req.url.substring(1))).pathname)/*(new URL(req.url.substring(1))).pathname,
+  router: (req) => console.log (new URL(req.url.substring(1)))/*,
+  pathRewrite: (path, req) => (new URL(req.url.substring(1))).pathname,
   changeOrigin: true,
   logger: console*/
 }))
