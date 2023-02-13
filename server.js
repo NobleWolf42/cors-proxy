@@ -25,11 +25,11 @@ app.all('*', function (req, res, next) {
 
     if (req.method === 'OPTIONS') {
         // CORS Preflight
-        res.send();
+        res.status(200).send();
     } else {
         var targetURL = req.header('Target-URL'); // Target-URL ie. https://example.com or http://example.com
         if (!targetURL) {
-            res.send(500, { error: 'There is no Target-Endpoint header in the request' });
+            res.status(500.send({ error: 'There is no Target-Endpoint header in the request' }));
             return;
         }
         request({ url: targetURL + req.url, method: req.method, json: req.body, headers: {'Authorization': req.header('Authorization')} },
