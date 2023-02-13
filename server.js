@@ -1,9 +1,6 @@
 const https = require('https');
 const { readFileSync } = require('fs');
 const botConfig = require('./botconfig.json');
-const express = require('express')
-const cors = require('cors')
-const { createProxyMiddleware } = require('http-proxy-middleware')
 const port = botConfig.oauth.port;
 var privateKey  = readFileSync(botConfig.oauth.privateKey, 'utf8');
 var certificate = readFileSync(botConfig.oauth.publicKey, 'utf8');
