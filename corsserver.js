@@ -26,6 +26,7 @@ app.all('*', function (req, res, next) {
     if (req.method === 'OPTIONS') {
         // CORS Preflight
         res.status(200).send();
+        console.log(res);
     } else {
         var targetURL = req.header('Target-URL'); // Target-URL ie. https://example.com or http://example.com
         if (!targetURL) {
