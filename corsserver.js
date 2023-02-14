@@ -17,6 +17,8 @@ console.log('Using limit: ', myLimit);
 app.use(bodyParser.json({limit: myLimit}));
 
 app.all('*', function (req, res, next) {
+    console.log(res);
+    console.log(req);
 
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
     res.header("Access-Control-Allow-Origin", "*");
@@ -26,7 +28,6 @@ app.all('*', function (req, res, next) {
     if (req.method === 'OPTIONS') {
         // CORS Preflight
         res.status(200).send();
-        console.log(res);
     } else {
         var targetURL = req.header('Target-URL'); // Target-URL ie. https://example.com or http://example.com
         if (!targetURL) {
