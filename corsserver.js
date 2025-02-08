@@ -56,3 +56,4 @@ app.all("*", function (req, res, next) {
 });
 
 https.createServer(credentials, app).listen(port);
+console.log(port);
