@@ -1,10 +1,6 @@
-const https = require("https");
-const { readFileSync } = require("fs");
+const http = require("http");
 const botConfig = require("./botconfig.json");
 const port = botConfig.oauth.port;
-var privateKey = readFileSync(botConfig.oauth.privateKey, "utf8");
-var certificate = readFileSync(botConfig.oauth.publicKey, "utf8");
-var credentials = { key: privateKey, cert: certificate };
 
 var express = require("express"),
     request = require("request"),
@@ -19,7 +15,13 @@ app.use(bodyParser.json({ limit: myLimit }));
 
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
-    res.header("Access-Control-Allow-Origin", "*");
+    const origin = req.get("origin");
+    if (
+        origin == "https://bencarpenterit.com" ||
+        origin == "https://noblewolf42.com"
+    ) {
+        res.header("Access-Control-Allow-Origin", origin);
+    }
     res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
     res.header(
         "Access-Control-Allow-Headers",
@@ -30,30 +32,37 @@ app.all("*", function (req, res, next) {
         // CORS Preflight
         res.status(200).send();
     } else {
-        var targetURL = req.header("Target-URL"); // Target-URL ie. https://example.com or http://example.com
-        console.log(targetURL);
+        const targetURL = req.header("Target-URL"); // Target-URL ie. https://example.com or http://example.com
         if (!targetURL) {
             res.status(500).send({
                 error: "There is no Target-Endpoint header in the request",
             });
             return;
-        }
-        request(
-            {
-                url: targetURL + req.url,
-                method: req.method,
-                json: req.body,
-                headers: { Authorization: req.header("Authorization") },
-            },
-            function (error, response, body) {
-                if (error) {
-                    console.error("error: " + response.statusCode);
+        } else if (targetURL == "steam" && req.header("steamId")) {
+            console.log(targetURL);
+            request(
+                {
+                    url:
+                        "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
+                        botConfig.steam.key +
+                        "&steamid=" +
+                        req.header("steamId") +
+                        "&format=json&include_appinfo=1" +
+                        req.url,
+                    method: req.method,
+                    json: req.body,
+                    headers: { Authorization: req.header("Authorization") },
+                },
+                function (error, response, body) {
+                    if (error) {
+                        console.error("error: " + response.statusCode);
+                    }
+                    //                console.log(body);
                 }
-                //                console.log(body);
-            }
-        ).pipe(res);
+            ).pipe(res);
+        }
     }
 });
 
-https.createServer(credentials, app).listen(port);
+http.createServer(credentials, app).listen(port);
 console.log(port);
