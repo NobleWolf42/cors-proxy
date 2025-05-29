@@ -34,7 +34,14 @@ app.all("*", function (req, res, next) {
     } else {
         const splitURL = req.url.split("/");
         if (splitURL[1] == "steamimages") {
-            console.log("steamimages");
+            console.log(
+                "https://media.steampowered.com/steamcommunity/public/images/apps/" +
+                    splitURL[2] +
+                    "/" +
+                    splitURL[3] +
+                    "&format=json&include_appinfo=1" +
+                    req.url
+            );
             request(
                 {
                     url:
