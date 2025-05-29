@@ -63,7 +63,7 @@ app.all("*", function (req, res, next) {
                 ).pipe(res);
             } else if (req.header("steamUsername")) {
                 console.log(req.header("steamUsername"));
-                const json = request(
+                request(
                     {
                         url:
                             "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=" +
