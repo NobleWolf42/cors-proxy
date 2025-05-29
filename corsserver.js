@@ -13,13 +13,9 @@ console.log("Using limit: ", myLimit);
 
 app.use(bodyParser.json({ limit: myLimit }));
 
-app.get("/steamimages", function (req, res) {
-    console.log(req);
-    //https://media.steampowered.com/steamcommunity/public/images/apps/
-});
-
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
+    console.log(req);
     const origin = req.get("origin");
     if (
         origin == "https://bencarpenterit.com" ||
