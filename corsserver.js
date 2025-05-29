@@ -86,11 +86,7 @@ app.all("*", function (req, res, next) {
                         }
                         //                console.log(body);
                     }
-                ).body();
-                console.log(json);
-                if (json.success == 1) {
-                    getGames(json.steamid);
-                }
+                ).pipe(res);
             }
         }
     }
