@@ -13,6 +13,10 @@ console.log("Using limit: ", myLimit);
 
 app.use(bodyParser.json({ limit: myLimit }));
 
+app.get("/steamimages", function (req, res) {
+    console.log(req);
+});
+
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
     const origin = req.get("origin");
