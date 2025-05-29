@@ -13,29 +13,6 @@ console.log("Using limit: ", myLimit);
 
 app.use(bodyParser.json({ limit: myLimit }));
 
-function getGames(steamId) {
-    request(
-        {
-            url:
-                "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
-                botConfig.steam.key +
-                "&steamid=" +
-                steamId +
-                "&format=json&include_appinfo=1" +
-                req.url,
-            method: req.method,
-            json: req.body,
-            headers: { Authorization: req.header("Authorization") },
-        },
-        function (error, response, body) {
-            if (error) {
-                console.error("error: " + response.statusCode);
-            }
-            //                console.log(body);
-        }
-    ).pipe(res);
-}
-
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
     const origin = req.get("origin");
@@ -64,7 +41,26 @@ app.all("*", function (req, res, next) {
         } else if (targetURL == "steam") {
             if (req.header("steamId")) {
                 console.log(targetURL);
-                getGames(steamId);
+                request(
+                    {
+                        url:
+                            "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
+                            botConfig.steam.key +
+                            "&steamid=" +
+                            steamId +
+                            "&format=json&include_appinfo=1" +
+                            req.url,
+                        method: req.method,
+                        json: req.body,
+                        headers: { Authorization: req.header("Authorization") },
+                    },
+                    function (error, response, body) {
+                        if (error) {
+                            console.error("error: " + response.statusCode);
+                        }
+                        //                console.log(body);
+                    }
+                ).pipe(res);
             } else if (req.header("steamUsername")) {
                 console.log(targetURL);
                 const json = request(
