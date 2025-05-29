@@ -47,7 +47,7 @@ app.all("*", function (req, res, next) {
                             "https://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=" +
                             botConfig.steam.key +
                             "&steamid=" +
-                            steamId +
+                            req.header("steamId") +
                             "&format=json&include_appinfo=1" +
                             req.url,
                         method: req.method,
