@@ -15,7 +15,6 @@ app.use(bodyParser.json({ limit: myLimit }));
 
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
-    console.log(req.url.split("/")[1]);
     const origin = req.get("origin");
     if (
         origin == "https://bencarpenterit.com" ||
@@ -33,8 +32,37 @@ app.all("*", function (req, res, next) {
         // CORS Preflight
         res.status(200).send();
     } else {
+        const splitURL = req.url.split("/");
+        if (splitURL[1] == "steamimages") {
+            console.log("steamimages");
+            request(
+                {
+                    url:
+                        "https://media.steampowered.com/steamcommunity/public/images/apps/" +
+                        splitURL[2] +
+                        "/" +
+                        splitURL[3] +
+                        "&format=json&include_appinfo=1" +
+                        req.url,
+                    method: req.method,
+                    json: req.body,
+                    headers: { Authorization: req.header("Authorization") },
+                },
+                function (error, response, body) {
+                    if (error) {
+                        console.error("error: " + response.statusCode);
+                    }
+                    //                console.log(body);
+                }
+            ).pipe(res);
+        }
         const targetURL = req.header("Target-URL"); // Target-URL ie. https://example.com or http://example.com
-        if (targetURL == "steam") {
+        if (!targetURL) {
+            res.status(500).send({
+                error: "There is no Target-Endpoint header in the request",
+            });
+            return;
+        } else if (targetURL == "steam") {
             if (req.header("steamId") != undefined) {
                 console.log(req.header("steamId"));
                 request(
