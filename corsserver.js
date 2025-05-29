@@ -40,7 +40,7 @@ app.all("*", function (req, res, next) {
             return;
         } else if (targetURL == "steam") {
             if (req.header("steamId")) {
-                console.log(targetURL);
+                console.log(req.header("steamId"));
                 request(
                     {
                         url:
@@ -62,14 +62,14 @@ app.all("*", function (req, res, next) {
                     }
                 ).pipe(res);
             } else if (req.header("steamUsername")) {
-                console.log(targetURL);
+                console.log(req.header("steamUsername"));
                 const json = request(
                     {
                         url:
                             "http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key=" +
                             botConfig.steam.key +
                             "&vanityurl=" +
-                            req.header("steamId") +
+                            req.header("steamUsername") +
                             "&format=json&include_appinfo=1" +
                             req.url,
                         method: req.method,
