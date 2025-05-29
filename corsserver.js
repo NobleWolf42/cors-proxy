@@ -57,12 +57,7 @@ app.all("*", function (req, res, next) {
             ).pipe(res);
         }
         const targetURL = req.header("Target-URL"); // Target-URL ie. https://example.com or http://example.com
-        if (!targetURL) {
-            res.status(500).send({
-                error: "There is no Target-Endpoint header in the request",
-            });
-            return;
-        } else if (targetURL == "steam") {
+        if (targetURL == "steam") {
             if (req.header("steamId") != undefined) {
                 console.log(req.header("steamId"));
                 request(
