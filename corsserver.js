@@ -15,7 +15,7 @@ app.use(bodyParser.json({ limit: myLimit }));
 
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
-    console.log(req.url.split("/"));
+    console.log(req.url.split("/")[1]);
     const origin = req.get("origin");
     if (
         origin == "https://bencarpenterit.com" ||
