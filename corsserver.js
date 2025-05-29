@@ -39,7 +39,7 @@ app.all("*", function (req, res, next) {
             });
             return;
         } else if (targetURL == "steam") {
-            if (req.header("steamId")) {
+            if (req.header("steamId") != undefined) {
                 console.log(req.header("steamId"));
                 request(
                     {
@@ -61,7 +61,7 @@ app.all("*", function (req, res, next) {
                         //                console.log(body);
                     }
                 ).pipe(res);
-            } else if (req.header("steamUsername")) {
+            } else if (req.header("steamUsername") != undefined) {
                 console.log(req.header("steamUsername"));
                 request(
                     {
