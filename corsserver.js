@@ -107,7 +107,6 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                        console.log(response);
                     }
                 ).pipe(res);
             }
