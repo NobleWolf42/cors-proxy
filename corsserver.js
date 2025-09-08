@@ -91,7 +91,7 @@ app.all("*", function (req, res, next) {
                     }
                 ).pipe(res);
             }
-        } else if (targetURL == "dictionary") {
+        } else if (targetURL == "dictionaryAPI") {
             if (req.header("word") != undefined) {
                 console.log(req.header("word"));
                 request(
@@ -101,6 +101,23 @@ app.all("*", function (req, res, next) {
                             req.header("word") +
                             "?key=" +
                             botConfig.dictionary.key,
+                        method: req.method,
+                    },
+                    function (error, response, body) {
+                        if (error) {
+                            console.error("error: " + response.statusCode);
+                        }
+                    }
+                ).pipe(res);
+            }
+        } else if (targetURL == "dictionaryDef") {
+            if (req.header("word") != undefined) {
+                console.log(req.header("word"));
+                request(
+                    {
+                        url:
+                            "https://www.merriam-webster.com/dictionary/" +
+                            req.header("word"),
                         method: req.method,
                     },
                     function (error, response, body) {
