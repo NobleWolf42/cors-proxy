@@ -49,11 +49,10 @@ app.all("*", function (req, res, next) {
                     if (error) {
                         console.error("error: " + response.statusCode);
                     }
-                    //                console.log(body);
                 }
             ).pipe(res);
         }
-        const targetURL = req.header("Target-URL"); // Target-URL ie. https://example.com or http://example.com
+        const targetURL = req.header("Target-URL");
         if (targetURL == "steam") {
             if (req.header("steamId") != undefined) {
                 console.log(req.header("steamId"));
@@ -74,7 +73,6 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                        //                console.log(body);
                     }
                 ).pipe(res);
             } else if (req.header("steamUsername") != undefined) {
@@ -96,7 +94,31 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                        //                console.log(body);
+                    }
+                ).pipe(res);
+            }
+        } else if (targetURL == "dictionary") {
+            if (req.header("word") != undefined) {
+                console.log(req.header("word"));
+                request(
+                    {
+                        url:
+                            "https://www.dictionaryapi.com/api/v3/references/collegiate/json/" +
+                            req.header("word") +
+                            "?key=" +
+                            botConfig.dictionary.key +
+                            "&steamid=" +
+                            req.header("steamId") +
+                            "&format=json&include_appinfo=1" +
+                            req.url,
+                        method: req.method,
+                        json: req.body,
+                        headers: { Authorization: req.header("Authorization") },
+                    },
+                    function (error, response, body) {
+                        if (error) {
+                            console.error("error: " + response.statusCode);
+                        }
                     }
                 ).pipe(res);
             }
