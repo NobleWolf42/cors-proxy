@@ -42,8 +42,6 @@ app.all("*", function (req, res, next) {
                         "/" +
                         splitURL[3],
                     method: req.method,
-                    json: req.body,
-                    headers: { Authorization: req.header("Authorization") },
                 },
                 function (error, response, body) {
                     if (error) {
@@ -66,8 +64,6 @@ app.all("*", function (req, res, next) {
                             "&format=json&include_appinfo=1" +
                             req.url,
                         method: req.method,
-                        json: req.body,
-                        headers: { Authorization: req.header("Authorization") },
                     },
                     function (error, response, body) {
                         if (error) {
@@ -87,8 +83,6 @@ app.all("*", function (req, res, next) {
                             "&format=json&include_appinfo=1" +
                             req.url,
                         method: req.method,
-                        json: req.body,
-                        headers: { Authorization: req.header("Authorization") },
                     },
                     function (error, response, body) {
                         if (error) {
@@ -106,14 +100,8 @@ app.all("*", function (req, res, next) {
                             "https://www.dictionaryapi.com/api/v3/references/collegiate/json/" +
                             req.header("word") +
                             "?key=" +
-                            botConfig.dictionary.key +
-                            "&steamid=" +
-                            req.header("steamId") +
-                            "&format=json&include_appinfo=1" +
-                            req.url,
+                            botConfig.dictionary.key,
                         method: req.method,
-                        json: req.body,
-                        headers: { Authorization: req.header("Authorization") },
                     },
                     function (error, response, body) {
                         if (error) {
