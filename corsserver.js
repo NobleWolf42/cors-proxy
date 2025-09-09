@@ -105,7 +105,7 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                        console.log(req.url);
+                        console.log(response.url);
                     }
                 ).pipe(res);
             }
