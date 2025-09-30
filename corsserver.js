@@ -13,7 +13,6 @@ let myLimit =
 console.log("Using limit: ", myLimit);
 
 app.use(bodyParser.json({ limit: myLimit }));
-
 app.use((req, res, next) => {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
     const origin = req.get("origin");
@@ -32,6 +31,32 @@ app.use((req, res, next) => {
     if (req.method === "OPTIONS") {
         // CORS Preflight
         res.status(200).send();
+    }
+});
+
+app.get("/getstats", (request, response) => {
+    console.log("Get Stats: ", stats);
+    response.send(stats);
+});
+
+app.get("/addstats", (request, response) => {
+    if (req.header("page")) {
+        stats.viewCounts.CSArtifact += 1;
+        console.log("Save Stats: ", stats);
+        fs.writeFile("./stats.json", JSON.stringify(stats), function (err) {
+            if (err) {
+                console.log("Save File Failed.");
+                console.log(err);
+                response.json({
+                    success: false,
+                });
+            } else {
+                console.log("File Saved Successfully!");
+                response.json({
+                    success: true,
+                });
+            }
+        });
     }
 });
 
@@ -135,32 +160,6 @@ app.get("/cors", (req, res) => {
                 }
             ).pipe(res);
         }
-    }
-});
-
-app.get("/getstats", (request, response) => {
-    console.log("Get Stats: ", stats);
-    response.send(stats);
-});
-
-app.get("/addstats", (request, response) => {
-    if (req.header("page")) {
-        stats.viewCounts.CSArtifact += 1;
-        console.log("Save Stats: ", stats);
-        fs.writeFile("./stats.json", JSON.stringify(stats), function (err) {
-            if (err) {
-                console.log("Save File Failed.");
-                console.log(err);
-                response.json({
-                    success: false,
-                });
-            } else {
-                console.log("File Saved Successfully!");
-                response.json({
-                    success: true,
-                });
-            }
-        });
     }
 });
 
