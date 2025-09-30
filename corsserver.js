@@ -3,7 +3,7 @@ const botConfig = require("./botconfig.json");
 const port = botConfig.oauth.port;
 let stats = require("./stats.json");
 
-let express = require("express"),
+const express = require("express"),
     request = require("request"),
     bodyParser = require("body-parser"),
     app = express();
