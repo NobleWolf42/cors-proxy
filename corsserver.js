@@ -54,7 +54,7 @@ app.post("/steamimages", function (req, res) {
     ).pipe(res);
 });
 
-app.post("/coors", function (req, res) {
+app.post("/cors", function (req, res) {
     const targetURL = req.header("Target-URL");
     if (targetURL == "steam") {
         if (req.header("steamId") != undefined) {
