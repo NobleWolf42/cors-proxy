@@ -1,8 +1,7 @@
 const http = require("http");
 const botConfig = require("./botconfig.json");
 const port = botConfig.oauth.port;
-let statsFile = require("./stats.json");
-let stats = JSON.parse(statsFile);
+let stats = require("./stats.json");
 
 var express = require("express"),
     request = require("request"),
