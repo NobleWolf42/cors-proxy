@@ -55,6 +55,7 @@ app.post("/steamimages", function (req, res) {
 });
 
 app.post("/cors", function (req, res) {
+    console.log("/CORS");
     const targetURL = req.header("Target-URL");
     console.log("Target URL: ", targetURL);
     if (targetURL == "steam") {
