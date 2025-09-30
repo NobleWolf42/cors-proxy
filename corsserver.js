@@ -139,23 +139,29 @@ app.get("/cors", (req, res) => {
 });
 
 app.get("/getstats", (request, response) => {
-    stats.viewCounts.CSArtifact += 1;
-    jsondata = JSON.stringify(stats);
-    console.log("Get Stats: ", jsondata);
-    fs.writeFile("./stats.json", jsondata, function (err) {
-        if (err) {
-            console.log("Save File Failed.");
-            console.log(err);
-            response.json({
-                success: false,
-            });
-        } else {
-            console.log("File Saved Successfully!");
-            response.json({
-                success: true,
-            });
-        }
-    });
+    console.log("Get Stats: ", stats);
+    response.send(stats);
+});
+
+app.get("/addstats", (request, response) => {
+    if (req.header("page")) {
+        stats.viewCounts.CSArtifact += 1;
+        console.log("Save Stats: ", stats);
+        fs.writeFile("./stats.json", JSON.stringify(stats), function (err) {
+            if (err) {
+                console.log("Save File Failed.");
+                console.log(err);
+                response.json({
+                    success: false,
+                });
+            } else {
+                console.log("File Saved Successfully!");
+                response.json({
+                    success: true,
+                });
+            }
+        });
+    }
 });
 
 http.createServer(app).listen(port);

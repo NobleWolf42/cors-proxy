@@ -1,3 +1,9 @@
 {
-    "cSpell.words": ["getstats", "jsondata", "steamid", "steamimages"]
+    "cSpell.words": [
+        "addstats",
+        "getstats",
+        "jsondata",
+        "steamid",
+        "steamimages"
+    ]
 }
