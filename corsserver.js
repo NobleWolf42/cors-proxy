@@ -159,4 +159,4 @@ app.post("/getstats", function (req, res) {
 });
 
 http.createServer(app).listen(port);
-console.log(port);
+console.log("PORT: ", port);
