@@ -54,7 +54,7 @@ app.all("*", function (req, res, next) {
             console.log("Get Stats: ", stats);
             res.send(stats);
         } else if (splitURL[1] == "addstats") {
-            if (req.header("page")) {
+            if (req.header("page") == "csartifact") {
                 stats.viewCounts.CSArtifact += 1;
                 console.log("Save Stats: ", stats);
                 fs.writeFile(
@@ -80,7 +80,7 @@ app.all("*", function (req, res, next) {
         const targetURL = req.header("Target-URL");
         if (targetURL == "steam") {
             if (req.header("steamId") != undefined) {
-                console.log(req.header("steamId"));
+                console.log("Steam ID: ", req.header("steamId"));
                 request(
                     {
                         url:
@@ -99,7 +99,7 @@ app.all("*", function (req, res, next) {
                     }
                 ).pipe(res);
             } else if (req.header("steamUsername") != undefined) {
-                console.log(req.header("steamUsername"));
+                console.log("Steam Username: ", req.header("steamUsername"));
                 request(
                     {
                         url:
@@ -120,7 +120,7 @@ app.all("*", function (req, res, next) {
             }
         } else if (targetURL == "dictionaryDef") {
             if (req.header("word") != undefined) {
-                console.log(req.header("word"));
+                console.log("Dictionary Definition Word: ", req.header("word"));
                 request(
                     {
                         url:
@@ -137,7 +137,7 @@ app.all("*", function (req, res, next) {
             }
         } else if (targetURL == "dictionaryAPI") {
             if (req.header("word") != undefined) {
-                console.log(req.header("word"));
+                console.log("Dictionary API Word: ", req.header("word"));
                 request(
                     {
                         url:
@@ -159,4 +159,4 @@ app.all("*", function (req, res, next) {
 });
 
 http.createServer(app).listen(port);
-console.log(port);
+console.log("PORT: ", port);
