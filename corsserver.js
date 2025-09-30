@@ -14,7 +14,7 @@ console.log("Using limit: ", myLimit);
 
 app.use(bodyParser.json({ limit: myLimit }));
 
-app.all("*", function (req, res) {
+app.use((req, res, next) => {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
     const origin = req.get("origin");
     if (
@@ -35,7 +35,7 @@ app.all("*", function (req, res) {
     }
 });
 
-app.all("/steamimages", function (req, res) {
+app.get("/steamimages", function (req, res) {
     const splitURL = req.url.split("/");
     request(
         {
@@ -54,7 +54,7 @@ app.all("/steamimages", function (req, res) {
     ).pipe(res);
 });
 
-app.all("/cors", function (req, res) {
+app.get("/cors", function (req, res) {
     console.log("/CORS");
     const targetURL = req.header("Target-URL");
     console.log("Target URL: ", targetURL);
@@ -138,7 +138,7 @@ app.all("/cors", function (req, res) {
     }
 });
 
-app.all("/getstats", function (request, response) {
+app.get("/getstats", function (request, response) {
     stats.viewCounts.CSArtifact += 1;
     jsondata = JSON.stringify(stats);
     console.log("Get Stats: ", jsondata);
