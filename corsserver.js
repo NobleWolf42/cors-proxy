@@ -1,6 +1,7 @@
 const http = require("http");
 const botConfig = require("./botconfig.json");
 const port = botConfig.oauth.port;
+let stats = require("./stats.json");
 
 var express = require("express"),
     request = require("request"),
@@ -49,6 +50,32 @@ app.all("*", function (req, res, next) {
                     }
                 }
             ).pipe(res);
+        } else if (splitURL[1] == "getstats") {
+            console.log("Get Stats: ", stats);
+            res.send(stats);
+        } else if (splitURL[1] == "addstats") {
+            if (req.header("page")) {
+                stats.viewCounts.CSArtifact += 1;
+                console.log("Save Stats: ", stats);
+                fs.writeFile(
+                    "./stats.json",
+                    JSON.stringify(stats),
+                    function (err) {
+                        if (err) {
+                            console.log("Save File Failed.");
+                            console.log(err);
+                            response.json({
+                                success: false,
+                            });
+                        } else {
+                            console.log("File Saved Successfully!");
+                            response.json({
+                                success: true,
+                            });
+                        }
+                    }
+                );
+            }
         }
         const targetURL = req.header("Target-URL");
         if (targetURL == "steam") {
