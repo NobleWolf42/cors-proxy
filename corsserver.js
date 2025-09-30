@@ -56,9 +56,10 @@ app.post("/steamimages", function (req, res) {
 
 app.post("/cors", function (req, res) {
     const targetURL = req.header("Target-URL");
+    console.log("Target URL: ", targetURL);
     if (targetURL == "steam") {
         if (req.header("steamId") != undefined) {
-            console.log(req.header("steamId"));
+            console.log("Steam ID: ", req.header("steamId"));
             request(
                 {
                     url:
@@ -77,7 +78,7 @@ app.post("/cors", function (req, res) {
                 }
             ).pipe(res);
         } else if (req.header("steamUsername") != undefined) {
-            console.log(req.header("steamUsername"));
+            console.log("Steam Username: ", req.header("steamUsername"));
             request(
                 {
                     url:
@@ -98,7 +99,7 @@ app.post("/cors", function (req, res) {
         }
     } else if (targetURL == "dictionaryDef") {
         if (req.header("word") != undefined) {
-            console.log(req.header("word"));
+            console.log("Dictionary Definition Word: ", req.header("word"));
             request(
                 {
                     url:
@@ -116,7 +117,7 @@ app.post("/cors", function (req, res) {
         }
     } else if (targetURL == "dictionaryAPI") {
         if (req.header("word") != undefined) {
-            console.log(req.header("word"));
+            console.log("Dictionary API Word: ", req.header("word"));
             request(
                 {
                     url:
@@ -139,6 +140,7 @@ app.post("/cors", function (req, res) {
 app.post("/getstats", function (req, res) {
     stats.viewCounts.CSArtifact += 1;
     jsondata = JSON.stringify(stats);
+    console.log("Get Stats: ", jsondata);
     fs.writeFile("./stats.json", jsondata, function (err) {
         if (err) {
             console.log("Save File Failed.");
