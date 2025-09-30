@@ -35,7 +35,7 @@ app.all("*", function (req, res) {
     }
 });
 
-app.post("/steamimages", function (req, res) {
+app.get("/steamimages", function (req, res) {
     const splitURL = req.url.split("/");
     request(
         {
@@ -54,7 +54,7 @@ app.post("/steamimages", function (req, res) {
     ).pipe(res);
 });
 
-app.post("/cors", function (req, res) {
+app.get("/cors", function (req, res) {
     console.log("/CORS");
     const targetURL = req.header("Target-URL");
     console.log("Target URL: ", targetURL);
@@ -138,7 +138,7 @@ app.post("/cors", function (req, res) {
     }
 });
 
-app.post("/getstats", function (req, res) {
+app.get("/getstats", function (request, response) {
     stats.viewCounts.CSArtifact += 1;
     jsondata = JSON.stringify(stats);
     console.log("Get Stats: ", jsondata);
