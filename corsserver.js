@@ -1,4 +1,5 @@
 const http = require("http");
+const fs = require("fs");
 const botConfig = require("./botconfig.json");
 const port = botConfig.oauth.port;
 let stats = require("./stats.json");
