@@ -3,12 +3,12 @@ const botConfig = require("./botconfig.json");
 const port = botConfig.oauth.port;
 let stats = require("./stats.json");
 
-var express = require("express"),
+let express = require("express"),
     request = require("request"),
     bodyParser = require("body-parser"),
     app = express();
 
-var myLimit =
+let myLimit =
     typeof process.argv[2] != "undefined" ? process.argv[2] : "1000kb";
 console.log("Using limit: ", myLimit);
 
