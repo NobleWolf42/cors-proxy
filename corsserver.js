@@ -65,12 +65,12 @@ app.all("*", function (req, res, next) {
                         if (err) {
                             console.log("Save File Failed.");
                             console.log(err);
-                            response.json({
+                            res.send({
                                 success: false,
                             });
                         } else {
                             console.log("File Saved Successfully!");
-                            response.json({
+                            res.send({
                                 success: true,
                             });
                         }
