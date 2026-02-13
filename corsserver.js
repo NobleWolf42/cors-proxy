@@ -76,6 +76,27 @@ app.all("*", function (req, res, next) {
                         }
                     }
                 );
+            } else if (req.header("page") == "matrixhowto") {
+                stats.viewCounts.matrixHowTo += 1;
+                console.log("Save Stats: ", stats);
+                fs.writeFile(
+                    "./stats.json",
+                    JSON.stringify(stats),
+                    function (err) {
+                        if (err) {
+                            console.log("Save File Failed.");
+                            console.log(err);
+                            res.send({
+                                success: false,
+                            });
+                        } else {
+                            console.log("File Saved Successfully!");
+                            res.send({
+                                success: true,
+                            });
+                        }
+                    }
+                );
             }
         }
         const targetURL = req.header("Target-URL");
