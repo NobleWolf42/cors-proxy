@@ -56,7 +56,7 @@ app.all("*", function (req, res, next) {
             res.send(stats);
         } else if (splitURL[1] == "addstats") {
             if (req.header("page") == "csartifact") {
-                stats.viewCounts.CSArtifact += 1;
+                stats.viewCounts.csartifact += 1;
                 console.log("Save Stats: ", stats);
                 fs.writeFile(
                     "./stats.json",
@@ -77,7 +77,7 @@ app.all("*", function (req, res, next) {
                     }
                 );
             } else if (req.header("page") == "matrixhowto") {
-                stats.viewCounts.matrixHowTo += 1;
+                stats.viewCounts.matrixhowto += 1;
                 console.log("Save Stats: ", stats);
                 fs.writeFile(
                     "./stats.json",
