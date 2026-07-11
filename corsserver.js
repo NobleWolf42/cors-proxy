@@ -15,6 +15,11 @@ console.log("Using limit: ", myLimit);
 
 app.use(bodyParser.json({ limit: myLimit }));
 
+app.get("/status", (req, res) => {
+    // Correct way to stop execution and respond
+    return res.sendStatus(200);
+});
+
 app.all("*", function (req, res, next) {
     // Set CORS headers: allow all origins, methods, and headers: you may want to lock this down in a production environment
     const origin = req.get("origin");
@@ -27,7 +32,7 @@ app.all("*", function (req, res, next) {
     res.header("Access-Control-Allow-Methods", "GET, PUT, PATCH, POST, DELETE");
     res.header(
         "Access-Control-Allow-Headers",
-        req.header("access-control-request-headers")
+        req.header("access-control-request-headers"),
     );
 
     if (req.method === "OPTIONS") {
@@ -49,7 +54,7 @@ app.all("*", function (req, res, next) {
                     if (error) {
                         console.error("error: " + response.statusCode);
                     }
-                }
+                },
             ).pipe(res);
         } else if (splitURL[1] == "getstats") {
             console.log("Get Stats: ", stats);
@@ -74,7 +79,7 @@ app.all("*", function (req, res, next) {
                                 success: true,
                             });
                         }
-                    }
+                    },
                 );
             } else if (req.header("page") == "matrixhowto") {
                 stats.viewCounts.matrixhowto += 1;
@@ -95,7 +100,7 @@ app.all("*", function (req, res, next) {
                                 success: true,
                             });
                         }
-                    }
+                    },
                 );
             }
         }
@@ -118,7 +123,7 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                    }
+                    },
                 ).pipe(res);
             } else if (req.header("steamUsername") != undefined) {
                 console.log("Steam Username: ", req.header("steamUsername"));
@@ -137,7 +142,7 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                    }
+                    },
                 ).pipe(res);
             }
         } else if (targetURL == "dictionaryDef") {
@@ -154,7 +159,7 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                    }
+                    },
                 ).pipe(res);
             }
         } else if (targetURL == "dictionaryAPI") {
@@ -173,7 +178,7 @@ app.all("*", function (req, res, next) {
                         if (error) {
                             console.error("error: " + response.statusCode);
                         }
-                    }
+                    },
                 ).pipe(res);
             }
         }
